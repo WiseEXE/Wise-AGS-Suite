@@ -24,3 +24,4 @@ secrets.js
 config.json
 private.ts
 .env
+.github/
