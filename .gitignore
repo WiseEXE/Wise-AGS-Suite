@@ -1,0 +1,26 @@
+node_modules/
+@girs/
+secrets.js
+
+# --- Dependencies ---
+node_modules/
+.npm/
+
+# --- Build/Cache ---
+# AGS often creates these temporary directories
+tmp/
+dist/
+out/
+cache/
+
+# --- System ---
+.DS_Store
+Thumbs.db
+
+# --- SECRETS (Very Important) ---
+# Ignore any file that might hold API keys
+secret.js
+secrets.js
+config.json
+private.ts
+.env
