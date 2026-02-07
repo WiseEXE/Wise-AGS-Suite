@@ -25,42 +25,41 @@ const AppItem = (app) => Widget.Button({
     tooltip_text: app.description || app.name,
 });
 
-const AppList = () => {
-    const list = applications.query('').map(app => AppItem(app));
-    
-    return Widget.Scrollable({
-        hscroll: 'never',
-        css: 'min-width: 400px; min-height: 500px;',
+export const AppMenu = () => {
+    const appList = Widget.Box({
+        vertical: true,
+        children: applications.query('').map(app => AppItem(app)),
+    });
+
+    const searchEntry = Widget.Entry({
+        class_name: 'app-search',
+        placeholder_text: 'Search applications...',
+        on_change: ({ text }) => {
+            // Filter apps based on search text
+            const filtered = applications.query(text || '');
+            appList.children = filtered.map(app => AppItem(app));
+        },
+    });
+
+    return Widget.Window({
+        name: 'app-menu',
+        anchor: ['top', 'bottom', 'left', 'right'],
+        visible: false,
+        keymode: 'on-demand',
         child: Widget.Box({
+            class_name: 'app-menu',
             vertical: true,
-            children: list,
+            children: [
+                searchEntry,
+                Widget.Scrollable({
+                    hscroll: 'never',
+                    css: 'min-width: 400px; min-height: 500px;',
+                    child: appList,
+                }),
+            ],
+        }),
+        setup: self => self.keybind('Escape', () => {
+            App.closeWindow('app-menu');
         }),
     });
 };
-
-export const AppMenu = () => Widget.Window({
-    name: 'app-menu',
-    anchor: ['top', 'bottom', 'left', 'right'],
-    visible: false,
-    keymode: 'on-demand',
-    child: Widget.Box({
-        class_name: 'app-menu',
-        vertical: true,
-        children: [
-            Widget.Entry({
-                class_name: 'app-search',
-                placeholder_text: 'Search applications...',
-                on_change: ({ text }) => {
-                    // Filter apps based on search text
-                    const filtered = applications.query(text || '');
-                    const list = App.getWindow('app-menu');
-                    // Update the list dynamically
-                },
-            }),
-            AppList(),
-        ],
-    }),
-    setup: self => self.keybind('Escape', () => {
-        App.closeWindow('app-menu');
-    }),
-});

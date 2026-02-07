@@ -3,10 +3,10 @@ const divide = ([total, free]) => free / total;
 
 const cpu = Variable(0, {
     poll: [2000, 'top -bn1', out => {
-        const lines = out.split('\n').find(line => line.includes('Cpu(s)'));
-        if (!lines) return 0;
-        const cpuLine = lines.split(',')[0];
-        const value = parseFloat(cpuLine.split(':')[1]);
+        const cpuLine = out.split('\n').find(line => line.includes('Cpu(s)'));
+        if (!cpuLine) return 0;
+        const cpuPart = cpuLine.split(',')[0];
+        const value = parseFloat(cpuPart.split(':')[1]);
         return value / 100;
     }],
 });
